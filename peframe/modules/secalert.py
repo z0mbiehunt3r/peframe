@@ -19,13 +19,13 @@
 
 
 def get(pe):
-	array = []
-	for section in pe.sections:
-		if section.SizeOfRawData == 0 or (section.get_entropy() > 0 and section.get_entropy() < 1) or section.get_entropy() > 7:
-			sc   = section.Name
-			md5  = section.get_hash_md5()
-			sha1 = section.get_hash_sha1()
-			array.append({"Section": sc, "Hash MD5": md5, "Hash SHA-1": sha1})
+    array = []
+    for section in pe.sections:
+        if section.SizeOfRawData == 0 or 0 < section.get_entropy() < 1 \
+                or section.get_entropy() > 7:
+            sc = section.Name
+            md5 = section.get_hash_md5()
+            sha1 = section.get_hash_sha1()
+            array.append({"Section": sc, "Hash MD5": md5, "Hash SHA-1": sha1})
 
-	return array
-
+    return array

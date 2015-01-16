@@ -23,16 +23,17 @@ from peframe import get_data
 
 
 # Load array by file alerts.txt
-alerts 		= loadfile.get(get_data('alerts.txt'))
+alerts = loadfile.get(get_data('alerts.txt'))
+
 
 def get(pe):
-	apialert_found = []
-	if hasattr(pe, 'DIRECTORY_ENTRY_IMPORT'):
-		for lib in pe.DIRECTORY_ENTRY_IMPORT:
-			for imp in lib.imports:
-				for alert in alerts:
-					if alert: # remove 'null'
-						if str(imp.name).startswith(alert):
-							apialert_found.append(imp.name)
+    apialert_found = []
+    if hasattr(pe, 'DIRECTORY_ENTRY_IMPORT'):
+        for lib in pe.DIRECTORY_ENTRY_IMPORT:
+            for imp in lib.imports:
+                for alert in alerts:
+                    if alert: # remove 'null'
+                        if str(imp.name).startswith(alert):
+                            apialert_found.append(imp.name)
 
-	return sorted(set(apialert_found))
+    return sorted(set(apialert_found))

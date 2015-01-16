@@ -23,18 +23,19 @@ from peframe import get_data
 
 
 # Load array by file antidbg.txt - Suspicious Functions Anti Debug
-antidbgs	= loadfile.get_apilist(get_data('antidbg.txt'))
+antidbgs = loadfile.get_apilist(get_data('antidbg.txt'))
+
 
 def get(pe):
-	array = []
-	DEI   = hasattr(pe, 'DIRECTORY_ENTRY_IMPORT')
-	if DEI:
-		for lib in pe.DIRECTORY_ENTRY_IMPORT:
-			for imp in lib.imports:
-				for antidbg in antidbgs:
-					if antidbg:
-						if str(imp.name).startswith(antidbg):
-							array.append(imp.name)
-							
-		return sorted(set(array))
+    array = []
+    DEI = hasattr(pe, 'DIRECTORY_ENTRY_IMPORT')
+    if DEI:
+        for lib in pe.DIRECTORY_ENTRY_IMPORT:
+            for imp in lib.imports:
+                for antidbg in antidbgs:
+                    if antidbg:
+                        if str(imp.name).startswith(antidbg):
+                            array.append(imp.name)
+
+        return sorted(set(array))
 

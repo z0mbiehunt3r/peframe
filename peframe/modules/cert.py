@@ -21,33 +21,33 @@
 import hashlib
 import json
 
-
 from peframe.thirdparty import pefile
 
 
 def get(pe):
+    # Virtual Address
+    cert_address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY[
+        'IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
 
-	# Virtual Address
-	cert_address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
+    # Size
+    cert_size = pe.OPTIONAL_HEADER.DATA_DIRECTORY[
+        pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].Size
 
-	# Size
-	cert_size = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].Size
+    if cert_address != 0 and cert_size != 0:
+        signature = pe.write()[cert_address + 8:]
+        cert_md5 = hashlib.md5(signature).hexdigest()
+        cert_sha1 = hashlib.sha1(signature).hexdigest()
+        signed = True
+    else:
+        cert_md5 = False
+        cert_sha1 = False
+        signed = False
 
-	if cert_address != 0 and cert_size !=0:
-		signature = pe.write()[cert_address+8:]
-		cert_md5  = hashlib.md5(signature).hexdigest()
-		cert_sha1 = hashlib.sha1(signature).hexdigest()
-		signed = True
-	else:
-		cert_md5  = False
-		cert_sha1 = False
-		signed = False
-
-	return json.dumps({"Virtual Address": cert_address, \
-					"Block Size": cert_size, \
-					"Hash MD5": cert_md5, \
-					"Hash SHA-1": cert_sha1
-					}, indent=4, separators=(',', ': '))
+    return json.dumps({"Virtual Address": cert_address, \
+                       "Block Size": cert_size, \
+                       "Hash MD5": cert_md5, \
+                       "Hash SHA-1": cert_sha1
+                      }, indent=4, separators=(',', ': '))
 
 #	return signed, cert_address, cert_size, cert_md5, cert_sha1
 

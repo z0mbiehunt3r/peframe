@@ -19,13 +19,13 @@
 
 
 def get(pe):
-	array = []
-	try:
-		for exp in pe.DIRECTORY_ENTRY_EXPORT.symbols:
-			# No dll
-			address = hex(pe.OPTIONAL_HEADER.ImageBase + exp.address)
-			function = exp.name
-			array.append([address, function])
-		return array
-	except:
-		return array
+    array = []
+    try:
+        for exp in pe.DIRECTORY_ENTRY_EXPORT.symbols:
+            # No dll
+            address = hex(pe.OPTIONAL_HEADER.ImageBase + exp.address)
+            function = exp.name
+            array.append([address, function])
+    except:
+        pass
+    return array

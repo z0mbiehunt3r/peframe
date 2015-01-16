@@ -22,87 +22,92 @@ from peframe.thirdparty import pefile
 
 
 def get_import(pe):
-	try:
-		imports = pe.DIRECTORY_ENTRY_IMPORT[0].struct
-	except:
-		try:
-			imports = pe.DIRECTORY_ENTRY_IMPORT.struct
-		except:
-			try:
-				imports = pe.DIRECTORY_ENTRY_IMPORT
-			except:
-				return False
-	
-	return imports
+    try:
+        imports = pe.DIRECTORY_ENTRY_IMPORT[0].struct
+    except:
+        try:
+            imports = pe.DIRECTORY_ENTRY_IMPORT.struct
+        except:
+            try:
+                imports = pe.DIRECTORY_ENTRY_IMPORT
+            except:
+                return False
+
+    return imports
+
 
 def get_export(pe):
-	try:
-		exports = pe.DIRECTORY_ENTRY_EXPORT[0].struct
-	except:
-		try:
-			exports = pe.DIRECTORY_ENTRY_EXPORT.struct
-		except:
-			try:
-				exports = pe.DIRECTORY_ENTRY_EXPORT
-			except:
-				return False
+    try:
+        exports = pe.DIRECTORY_ENTRY_EXPORT[0].struct
+    except:
+        try:
+            exports = pe.DIRECTORY_ENTRY_EXPORT.struct
+        except:
+            try:
+                exports = pe.DIRECTORY_ENTRY_EXPORT
+            except:
+                return False
 
-	return exports
+    return exports
+
 
 def get_resource(pe):
-	try:
-		resources = pe.DIRECTORY_ENTRY_RESOURCE[0].struct
-	except:
-		try:
-			resources = pe.DIRECTORY_ENTRY_RESOURCE.struct
-		except:
-			try:
-				resources = pe.DIRECTORY_ENTRY_RESOURCE
-			except:
-				return False
+    try:
+        resources = pe.DIRECTORY_ENTRY_RESOURCE[0].struct
+    except:
+        try:
+            resources = pe.DIRECTORY_ENTRY_RESOURCE.struct
+        except:
+            try:
+                resources = pe.DIRECTORY_ENTRY_RESOURCE
+            except:
+                return False
 
-	return resources
+    return resources
+
 
 def get_debug(pe):
-	try:
-		debug = pe.DIRECTORY_ENTRY_DEBUG[0].struct
-	except:
-		try:
-			debug = pe.DIRECTORY_ENTRY_DEBUG.struct
-		except:
-			try:
-				debug = pe.DIRECTORY_ENTRY_DEBUG
-			except:
-				return False
+    try:
+        debug = pe.DIRECTORY_ENTRY_DEBUG[0].struct
+    except:
+        try:
+            debug = pe.DIRECTORY_ENTRY_DEBUG.struct
+        except:
+            try:
+                debug = pe.DIRECTORY_ENTRY_DEBUG
+            except:
+                return False
 
-	return debug
+    return debug
+
 
 def get_tls(pe):
-	try:
-		tls = pefile.DIRECTORY_ENTRY_TLS[0].struct
-	except:
-		try:
-			tls = pe.DIRECTORY_ENTRY_TLS.struct
-		except:
-			try:
-				tls = pe.DIRECTORY_ENTRY_TLS
-			except:
-				return False
+    try:
+        tls = pefile.DIRECTORY_ENTRY_TLS[0].struct
+    except:
+        try:
+            tls = pe.DIRECTORY_ENTRY_TLS.struct
+        except:
+            try:
+                tls = pe.DIRECTORY_ENTRY_TLS
+            except:
+                return False
 
-	return tls
+    return tls
+
 
 def get_basereloc(pe):
-	try:
-		basereloc = pefile.DIRECTORY_ENTRY_BASERELOC[0].struct
-	except:
-		try:
-			basereloc = pe.DIRECTORY_ENTRY_BASERELOC.struct
-		except:
-			try:
-				basereloc = pe.DIRECTORY_ENTRY_BASERELOC
-			except:
-				return False
+    try:
+        basereloc = pefile.DIRECTORY_ENTRY_BASERELOC[0].struct
+    except:
+        try:
+            basereloc = pe.DIRECTORY_ENTRY_BASERELOC.struct
+        except:
+            try:
+                basereloc = pe.DIRECTORY_ENTRY_BASERELOC
+            except:
+                return False
 
-	return basereloc
+    return basereloc
 
 

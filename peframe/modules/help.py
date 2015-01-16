@@ -18,33 +18,35 @@
 # ----------------------------------------------------------------------
 
 # About
-NAME		= "PEframe"
-VERSION		= "4.2"
-AUTHOR		= "Author: Gianni 'guelfoweb' Amato"
-GITHUB		= "Github: https://github.com/guelfoweb/peframe"
-INFO		= NAME+" v."+VERSION+" - Open Source Project\n"+AUTHOR+"\n"+GITHUB
+NAME = "PEframe"
+VERSION = "4.2"
+AUTHOR = "Author: Gianni 'guelfoweb' Amato"
+GITHUB = "Github: https://github.com/guelfoweb/peframe"
+INFO = (NAME + " v." + VERSION + " - Open Source Project\n" + AUTHOR + "\n"
+        + GITHUB)
+
 
 # Help
 def help():
-	print INFO
-	print
-	print "Usage"
-	print "".ljust(4), "peframe.py malware.exe"
-	print "".ljust(4), "peframe.py [--option] malware.exe"
-	print
-	print "Option"
-	print "".ljust(4), "--json".ljust(14), "Output in json"
-	print
-	print "".ljust(4), "--import".ljust(14), "Imported DLL and functions"
-	print "".ljust(4), "--export".ljust(14), "Exported functions"
-	print
-	print "".ljust(4), "--dir-import".ljust(14), "Import directory"
-	print "".ljust(4), "--dir-export".ljust(14), "Export directory"
-	print "".ljust(4), "--dir-resource".ljust(14), "Resource directory"
-	print "".ljust(4), "--dir-debug".ljust(14), "Debug directory"
-	print "".ljust(4), "--dir-tls".ljust(14), "TLS directory"
-	print
-	print "".ljust(4), "--strings".ljust(14), "Get all strings"
-	print "".ljust(4), "--sections".ljust(14), "Sections information"
-	print "".ljust(4), "--dump".ljust(14), "Dump all information"
+    print INFO
+    print
+    print "Usage"
+    print "".ljust(4), "peframe.py malware.exe"
+    print "".ljust(4), "peframe.py [--option] malware.exe"
+    print
+    print "Option"
+    print "".ljust(4), "--json".ljust(14), "Output in json"
+    print
+    print "".ljust(4), "--import".ljust(14), "Imported DLL and functions"
+    print "".ljust(4), "--export".ljust(14), "Exported functions"
+    print
+    print "".ljust(4), "--dir-import".ljust(14), "Import directory"
+    print "".ljust(4), "--dir-export".ljust(14), "Export directory"
+    print "".ljust(4), "--dir-resource".ljust(14), "Resource directory"
+    print "".ljust(4), "--dir-debug".ljust(14), "Debug directory"
+    print "".ljust(4), "--dir-tls".ljust(14), "TLS directory"
+    print
+    print "".ljust(4), "--strings".ljust(14), "Get all strings"
+    print "".ljust(4), "--sections".ljust(14), "Sections information"
+    print "".ljust(4), "--dump".ljust(14), "Dump all information"
 

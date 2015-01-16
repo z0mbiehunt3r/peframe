@@ -19,23 +19,23 @@
 
 
 def get(pe):
-	array = []
-	for section in pe.sections:
-		section.get_entropy()
-		if section.SizeOfRawData == 0 or (section.get_entropy() > 0 and section.get_entropy() < 1) or section.get_entropy() > 7:
-			suspicious = True
-		else:
-			suspicious = False
-		
-		scn  = section.Name
-		md5  = section.get_hash_md5()
-		sha1 = section.get_hash_sha1()
-		spc  = suspicious
-		va   = hex(section.VirtualAddress)
-		vs   = hex(section.Misc_VirtualSize)
-		srd  = section.SizeOfRawData
+    array = []
+    for section in pe.sections:
+        section.get_entropy()
+        if section.SizeOfRawData == 0 or (0 < section.get_entropy() < 1) \
+                or section.get_entropy() > 7:
+            suspicious = True
+        else:
+            suspicious = False
 
-		array.append([scn, md5, sha1, spc, va, vs, srd])
+        scn = section.Name
+        md5 = section.get_hash_md5()
+        sha1 = section.get_hash_sha1()
+        spc = suspicious
+        va = hex(section.VirtualAddress)
+        vs = hex(section.Misc_VirtualSize)
+        srd = section.SizeOfRawData
 
-	return array
+        array.append([scn, md5, sha1, spc, va, vs, srd])
 
+    return array

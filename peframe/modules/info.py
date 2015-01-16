@@ -22,7 +22,6 @@ import hashlib
 import json
 import os
 
-
 import antivm
 import apiantidbg
 import directories
@@ -31,81 +30,82 @@ import xor
 
 
 def get_hash(pe, filename):
-	# Import Hash 
-	# https://www.mandiant.com/blog/tracking-malware-import-hashing/
-	ih = pe.get_imphash()
+    # Import Hash
+    # https://www.mandiant.com/blog/tracking-malware-import-hashing/
+    ih = pe.get_imphash()
 
-	# Thank to 'Christophe Monniez' for patched hash function
-	fh = open(filename, 'rb')
-	m = hashlib.md5()
-	s = hashlib.sha1()
-	
-	while True:
-		data = fh.read(8192)
-		if not data:
-			break
+    # Thank to 'Christophe Monniez' for patched hash function
+    fh = open(filename, 'rb')
+    m = hashlib.md5()
+    s = hashlib.sha1()
 
-		m.update(data)
-		s.update(data)
+    while True:
+        data = fh.read(8192)
+        if not data:
+            break
 
-	md5  = m.hexdigest()
-	sha1 = s.hexdigest()
+        m.update(data)
+        s.update(data)
 
-	return md5,sha1,ih
-	
+    md5 = m.hexdigest()
+    sha1 = s.hexdigest()
+
+    return md5, sha1, ih
+
+
 def get(pe, filename):
+    fname = os.path.basename(filename)    # file name -> use (filename)
+    fsize = os.path.getsize(
+        filename)    # file size (in byte) -> use (filename)
 
-	fname = os.path.basename(filename)	# file name -> use (filename)
-	fsize = os.path.getsize(filename)	# file size (in byte) -> use (filename)
-	
-	dll   = pe.FILE_HEADER.IMAGE_FILE_DLL 	# dll -> use (pe)
-	nsec  = pe.FILE_HEADER.NumberOfSections	# num sections -> use (pe)
+    dll = pe.FILE_HEADER.IMAGE_FILE_DLL    # dll -> use (pe)
+    nsec = pe.FILE_HEADER.NumberOfSections    # num sections -> use (pe)
 
-	tstamp = pe.FILE_HEADER.TimeDateStamp	# timestamp -> (pe)
-	try:
-		""" return date """
-		tsdate = datetime.datetime.fromtimestamp(tstamp)
-	except:
-		""" return timestamp """
-		tsdate = str(tstamp) + " [Invalid date]"
+    tstamp = pe.FILE_HEADER.TimeDateStamp    # timestamp -> (pe)
+    try:
+        # return date
+        tsdate = datetime.datetime.fromtimestamp(tstamp)
+    except:
+        # return timestamp
+        tsdate = str(tstamp) + " [Invalid date]"
 
-	md5, sha1, imphash = get_hash(pe, filename) # get md5, sha1, imphash -> (pe, filename)
-	# directory -> (pe)
-	dirlist = directories.get(pe)
-	
-	detected = []
+    md5, sha1, imphash = \
+        get_hash(pe, filename) # get md5, sha1, imphash -> (pe, filename)
+    # directory -> (pe)
+    dirlist = directories.get(pe)
 
-	for sign in dirlist:			# digital signature
-		if sign == "Security":
-			detected.append("Sign")
+    detected = []
 
-	packer = peid.get(pe)			# packer (peid)
-	if packer:
-		detected.append("Packer")
+    for sign in dirlist:            # digital signature
+        if sign == "Security":
+            detected.append("Sign")
 
-	antidbg = apiantidbg.get(pe)	# anti debug
-	if antidbg:
-		detected.append("Anti Debug")
+    packer = peid.get(pe)            # packer (peid)
+    if packer:
+        detected.append("Packer")
 
-	xorcheck = xor.get(filename) 	# Xor
-	if xorcheck[0] and xorcheck[1]:
-			detected.append("Xor")
+    antidbg = apiantidbg.get(pe)    # anti debug
+    if antidbg:
+        detected.append("Anti Debug")
 
-	antivirtualmachine = antivm.get(filename) # anti virtual machine
-	if antivirtualmachine:
-		detected.append("Anti VM")
-	
-	return json.dumps({"File Name": fname, \
-					"File Size": str(fsize), \
-					"Compile Time": str(tsdate), \
-					"DLL": dll, \
-					"Sections": nsec, \
-					"Hash MD5": md5, \
-					"Hash SHA-1": sha1, \
-					"Import Hash": imphash, \
-					"Xor": xorcheck[0], \
-					"Detected": detected, \
-					"Directories": dirlist
-					}, indent=4, separators=(',', ': '))
-					
-#	return [fname, str(fsize), str(tsdate), dll, nsec, md5, sha1, imphash, dirlist, detected]
+    xorcheck = xor.get(filename)    # Xor
+    if xorcheck[0] and xorcheck[1]:
+        detected.append("Xor")
+
+    antivirtualmachine = antivm.get(filename)  # anti virtual machine
+    if antivirtualmachine:
+        detected.append("Anti VM")
+
+    info_dict = {
+        "File Name": fname,
+        "File Size": str(fsize),
+        "Compile Time": str(tsdate),
+        "DLL": dll,
+        "Sections": nsec,
+        "Hash MD5": md5,
+        "Hash SHA-1": sha1,
+        "Import Hash": imphash,
+        "Xor": xorcheck[0],
+        "Detected": detected,
+        "Directories": dirlist}
+    return json.dumps(info_dict, indent=4, separators=(',', ': '))

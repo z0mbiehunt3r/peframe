@@ -19,14 +19,14 @@
 
 
 def get(pe):
-	array = []
-	try:
-		for entry in pe.DIRECTORY_ENTRY_IMPORT:
-			dll = entry.dll
-			for imp in entry.imports:
-				address = hex(imp.address)
-				function = imp.name
-				array.append([dll, address, function])
-		return array
-	except:
-		return array
+    array = []
+    try:
+        for entry in pe.DIRECTORY_ENTRY_IMPORT:
+            dll = entry.dll
+            for imp in entry.imports:
+                address = hex(imp.address)
+                function = imp.name
+                array.append([dll, address, function])
+    except:
+        pass
+    return array

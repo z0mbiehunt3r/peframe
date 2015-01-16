@@ -23,17 +23,18 @@ from peframe.thirdparty import peutils
 
 
 # Load PEID userdb.txt database
-fn_userdb 	= get_data('userdb.txt')
+fn_userdb = get_data('userdb.txt')
+
 
 def get(pe):
-	signatures = peutils.SignatureDatabase(fn_userdb)
-	matches = signatures.match_all(pe,ep_only = True)
-	array = []
-	if matches:
-		for item in matches:
-			# remove duplicate
-			if item[0] not in array:
-				array.append(item[0])
+    signatures = peutils.SignatureDatabase(fn_userdb)
+    matches = signatures.match_all(pe, ep_only=True)
+    array = []
+    if matches:
+        for item in matches:
+            # remove duplicate
+            if item[0] not in array:
+                array.append(item[0])
 
-	return array
+    return array
 

@@ -22,10 +22,12 @@ import string
 
 
 printable = set(string.printable)
+
+
 def get_process(stream):
     found_str = ""
     while True:
-        data = stream.read(1024*4)
+        data = stream.read(1024 * 4)
         if not data:
             break
         for char in data:
@@ -37,11 +39,12 @@ def get_process(stream):
             else:
                 found_str = ""
 
+
 def get(filename):
-	array = ""
-	PEtoStr = open(filename, 'rb')
-	for string in get_process(PEtoStr):
-		array += string
-	PEtoStr.close()
-	return array
+    array = ""
+    PEtoStr = open(filename, 'rb')
+    for string in get_process(PEtoStr):
+        array += string
+    PEtoStr.close()
+    return array
 

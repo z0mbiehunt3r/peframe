@@ -23,28 +23,35 @@ import string
 
 def convert_char(char):
     if char in string.ascii_letters or \
-       char in string.digits or \
-       char in string.punctuation or \
-       char in string.whitespace:
+        char in string.digits or \
+        char in string.punctuation or \
+            char in string.whitespace:
         return char
     else:
         return r'\x%02x' % ord(char)
 
+
 def convert_to_printable(s):
     return ''.join([convert_char(c) for c in s])
-            
+
+
 def get(pe):
-	ret = []	
-	if hasattr(pe, 'VS_VERSIONINFO'):
-	    if hasattr(pe, 'FileInfo'):
-	        for entry in pe.FileInfo:
-	            if hasattr(entry, 'StringTable'):
-	                for st_entry in entry.StringTable:
-	                    for str_entry in st_entry.entries.items():
-	                        ret.append(convert_to_printable(str_entry[0])+': '+convert_to_printable(str_entry[1]))
-	            elif hasattr(entry, 'Var'):
-	                for var_entry in entry.Var:
-	                    if hasattr(var_entry, 'entry'):
-	                        ret.append(convert_to_printable(var_entry.entry.keys()[0]) + ': ' + convert_to_printable(var_entry.entry.values()[0]))
-	
-	return ret
+    ret = []
+    if hasattr(pe, 'VS_VERSIONINFO'):
+        if hasattr(pe, 'FileInfo'):
+            for entry in pe.FileInfo:
+                if hasattr(entry, 'StringTable'):
+                    for st_entry in entry.StringTable:
+                        for str_entry in st_entry.entries.items():
+                            ret.append(convert_to_printable(
+                                str_entry[0]) + ': ' + convert_to_printable(
+                                    str_entry[1]))
+                elif hasattr(entry, 'Var'):
+                    for var_entry in entry.Var:
+                        if hasattr(var_entry, 'entry'):
+                            ret.append(convert_to_printable(
+                                var_entry.entry.keys()[
+                                    0]) + ': ' + convert_to_printable(
+                                        var_entry.entry.values()[0]))
+
+    return ret

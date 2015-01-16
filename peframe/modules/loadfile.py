@@ -17,19 +17,21 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+
 def get(filename):
-	try:
-		fname = open(filename,'r')
-		wlist = fname.read().split('\n')
-		fname.close
-		return wlist
-	except:
-		return False
+    try:
+        fname = open(filename, 'r')
+        wlist = fname.read().split('\n')
+        fname.close
+        return wlist
+    except:
+        return False
+
 
 def get_apilist(filename):
-	wlist = get(filename)
-	if wlist:
-		return wlist
-	print "File not found ["+filename+"]"
-	exit(0)
+    wlist = get(filename)
+    if wlist:
+        return wlist
+    print "File not found [" + filename + "]"
+    exit(0)
 

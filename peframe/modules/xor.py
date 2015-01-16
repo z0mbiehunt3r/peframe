@@ -21,38 +21,39 @@
 import array
 
 
-def xor_delta(s, key_len = 1):
+def xor_delta(s, key_len=1):
     delta = array.array('B', s)
-     
+
     for x in xrange(key_len, len(s)):
         delta[x - key_len] ^= delta[x]
-         
-    """ return the delta as a string """
+
+    # return the delta as a string
     return delta.tostring()[:-key_len]
- 
+
+
 def get(filename):
-	check = []
-	search_file = open(filename, "r").read()
-	key_lengths=[1,2,4,8]
-	search_string = "This program cannot be run in DOS mode."
-	 
-	for l in key_lengths:
-		key_delta = xor_delta(search_string, l)
-		 
-		doc_delta = xor_delta(search_file, l)
-		 
-		offset = -1
-		while(True):
-			offset += 1
-			offset = doc_delta.find(key_delta, offset)
-			if(offset > 0):
-				check.append((l, offset))
-			else:
-				break
+    check = []
+    search_file = open(filename, "r").read()
+    key_lengths = [1, 2, 4, 8]
+    search_string = "This program cannot be run in DOS mode."
 
-	detect = [item for item in check if item[1] == 78]
+    for l in key_lengths:
+        key_delta = xor_delta(search_string, l)
 
-	if detect:
-		return False, check
-	else:
-		return True, check
+        doc_delta = xor_delta(search_file, l)
+
+        offset = -1
+        while True:
+            offset += 1
+            offset = doc_delta.find(key_delta, offset)
+            if offset > 0:
+                check.append((l, offset))
+            else:
+                break
+
+    detect = [item for item in check if item[1] == 78]
+
+    if detect:
+        return False, check
+    else:
+        return True, check
