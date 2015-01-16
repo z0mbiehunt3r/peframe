@@ -17,32 +17,29 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+
 import json
 
-import pefile
-import peutils
 
-import info
-import cert
-import peid
-import loadfile
-import apiantidbg
-import xor
 import antivm
 import apialert
-import secalert
+import apiantidbg
+import cert
+import directory
+import dump
 import fileurl
-import meta
-
-import funcimport
 import funcexport
+import funcimport
+import info
+import meta
+import peid
+import secalert
 import sections
 import strings
-import dump
-import directory
-
+import xor
 global filename
 global pe
+
 
 def get_info(pe, filename):
 	show_info = json.loads(info.get(pe, filename))

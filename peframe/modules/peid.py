@@ -17,10 +17,9 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-import os
-import pefile
-import peutils
+
 from peframe import get_data
+from peframe.thirdparty import peutils
 
 
 # Load PEID userdb.txt database

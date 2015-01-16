@@ -17,8 +17,9 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-import pefile
-import peutils
+
+from peframe.thirdparty import pefile
+
 
 def get_import(pe):
 	try:

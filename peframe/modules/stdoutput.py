@@ -17,9 +17,12 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+
 import json
 
-import pecore
+
+from peframe.modules import pecore
+
 
 def show_import(pe):
 	import_load = json.loads(pecore.get_import(pe))

@@ -17,10 +17,9 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+
 import string
 
-import pefile
-import peutils
 
 printable = set(string.printable)
 def get_process(stream):

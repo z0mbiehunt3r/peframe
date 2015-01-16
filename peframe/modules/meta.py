@@ -17,10 +17,8 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-import string
 
-import pefile
-import peutils
+import string
 
 
 def convert_char(char):

@@ -17,13 +17,7 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-try:
-	import pefile
-	import peutils
-except ImportError:
-	print 'Error: import pefile or peutils modules failed.'
-	exit(0)
-	
+
 def get(pe):
 	array = []
 	try:

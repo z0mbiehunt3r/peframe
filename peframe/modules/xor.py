@@ -17,9 +17,10 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+
 import array
-import binascii
- 
+
+
 def xor_delta(s, key_len = 1):
     delta = array.array('B', s)
      

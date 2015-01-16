@@ -19,9 +19,8 @@ import os, sys
 import time, datetime
 import json
 
-# sys.path.insert(0, 'modules')
-
-from modules import pefile, peutils, pecore, stdoutput, help
+from peframe.modules import pecore, stdoutput, help
+from peframe.thirdparty import pefile
 
 
 def is_pe(filename):

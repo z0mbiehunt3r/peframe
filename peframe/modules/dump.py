@@ -17,8 +17,6 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-import pefile
-import peutils
 
 def get(pe):
 	return pe.dump_info()

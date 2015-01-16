@@ -17,19 +17,18 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-import os
-import time, datetime
+import datetime
 import hashlib
 import json
+import os
 
+
+import antivm
+import apiantidbg
 import directories
 import peid
-import apiantidbg
-import antivm
 import xor
 
-import pefile
-import peutils
 
 def get_hash(pe, filename):
 	# Import Hash 

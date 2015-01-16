@@ -17,15 +17,13 @@
 # along with PEframe. If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+
 import hashlib
 import json
 
-try:
-	import pefile
-	import peutils
-except ImportError:
-	print 'Error: import pefile or peutils modules failed.'
-	sys.exit(0)
+
+from peframe.thirdparty import pefile
+
 
 def get(pe):
 
