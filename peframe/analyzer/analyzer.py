@@ -23,15 +23,6 @@ import json
 import os
 import string
 
-import sys
-# hijack bult-in re module and replace with re2
-if 're' in sys.modules:
-    del sys.modules['re']
-try:
-    import re2 as re
-except ImportError:
-    import re
-
 from peframe.thirdparty import pefile, peutils
 
 
