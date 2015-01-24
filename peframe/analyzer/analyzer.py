@@ -21,7 +21,13 @@ import datetime
 import hashlib
 import json
 import os
+import re
 import string
+
+try:
+    import rfc3987
+except ImportError:
+    print 'You need rfc3987 module, check https://pypi.python.org/pypi/rfc3987'
 
 from peframe.thirdparty import pefile, peutils
 
@@ -36,7 +42,8 @@ class PEAnalyzer(object):
                  'directories_addresses', 'cert_dict', 'vm_tricks',
                  'imphash', 'md5_hash', 'sha1_hash', 'file_name', 'file_size',
                  'antidebugger_signatures', 'detected_antidebugger',
-                 'is_dll', 'num_sections', 'timestamp', 'timestamp_date']
+                 'is_dll', 'num_sections', 'timestamp', 'timestamp_date',
+                 'extracted_strings', '_uri_matcher', 'extracted_uris']
 
     @property
     def file_path(self):
@@ -58,6 +65,8 @@ class PEAnalyzer(object):
         self.detected_packers = set()
         self.detected_suspiciousapi = set()
         self.directories_addresses = {}
+        self.extracted_strings = tuple()
+        self.extracted_uris = tuple()
         self.file_name = None
         self.file_size = None
         self.imphash = None
@@ -93,6 +102,8 @@ class PEAnalyzer(object):
             'Torpig (UPX) VMM Trick': '\x51\x51\x0F\x01\x27\x00\xC1\xFB\xB5\xD5\x35\x02\xE2\xC3\xD1\x66\x25\x32\xBD\x83\x7F\xB7\x4E\x3D\x06\x80\x0F\x95\xC1\x8B\xC1\xC3'
         }
 
+        self._uri_matcher = rfc3987.get_compiled_pattern('^%(URI)s$')
+
         analyzer_basepath = os.path.dirname(os.path.abspath(__file__))
         signatures_path = os.path.join(analyzer_basepath, 'signatures')
 
@@ -105,7 +116,7 @@ class PEAnalyzer(object):
         with open(antidbg_path, 'r') as fd:
             antidbgs = fd.readlines()
         self._antidebugger_signatures = set([antidbg.strip()
-                                           for antidbg in antidbgs])
+                                             for antidbg in antidbgs])
         with open(alerts_path, 'r') as fd:
             alerts = fd.readlines()
         self._suspiciousapi_signatures = set([apialert.strip()
@@ -298,11 +309,36 @@ class PEAnalyzer(object):
                 self.section_alerts.append(alert)
         return self.section_alerts
 
-    def extract_fileurl(self):
+    def extract_strings(self, min_length=6):
         """"""
-        # if not self.pe_loaded:
-        # self._load_pe()
-        raise NotImplementedError()
+        if not self.pe_loaded:
+            self._load_pe()
+        # already extracted, just return them
+        if len(self.extracted_strings) > 0:
+            return self.extracted_strings
+
+        # regex from cuckoo project
+        strings = tuple(found.strip() for found in
+                        re.findall('[\x1f-\x7e]{%s,}' %
+                                   min_length, self._pe_raw))
+        strings += tuple(str(ws.decode("utf-16le")).strip()
+                         for ws in re.findall('(?:[\x1f-\x7e][\x00]){%s,}'
+                                              % min_length, self._pe_raw))
+        self.extracted_strings = strings
+        return self.extracted_strings
+
+    def extract_uris(self, min_length=10):
+        """"""
+        if not self.pe_loaded:
+            self._load_pe()
+        # used when calling .extract_fileurl() before .extract_strings()
+        if len(self.extracted_strings) <= 0:
+            self.extract_strings()
+
+        self.extracted_uris = tuple(uri for uri in self.extracted_strings if
+                                    len(uri) > min_length and
+                                    self._uri_matcher.match(uri))
+        return self.extracted_uris
 
     def extract_metadata(self):
         """"""
@@ -343,6 +379,8 @@ class PEAnalyzer(object):
             'num_sections': self.num_sections,
             'packers': list(self.detected_packers),
             'section_alerts': list(self.section_alerts),
+            'strings': tuple(self.extracted_strings),
+            'uris': tuple(self.extracted_uris),
             'sha1_hash': self.sha1_hash,
             'suspicious_apis': list(self.detected_suspiciousapi),
             'xor_detected': list(self.xor_detected),
@@ -368,7 +406,8 @@ class PEAnalyzer(object):
         analyzer.detect_suspicious_apis()
         analyzer.detect_suspicious_sections()
         analyzer.extract_metadata()
-        # analyzer.extract_fileurl()
+        analyzer.extract_uris()
+        analyzer.extract_strings()
         analyzer.extract_directories_addresses()
         return analyzer.json
 
@@ -385,5 +424,6 @@ class PEAnalyzer(object):
         self.detect_suspicious_apis()
         self.detect_suspicious_sections()
         self.extract_metadata()
-        # self.extract_fileurl()
+        self.extract_uris()
+        self.extract_strings()
         self.extract_directories_addresses()

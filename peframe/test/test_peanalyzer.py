@@ -140,8 +140,17 @@ class PEAnalyzerTestCase(unittest.TestCase):
 
     def test_uri_extraction(self):
         """"""
-        self.assertRaises(NotImplementedError,
-                          lambda: self.analyzer.extract_fileurl())
+        expected_uris = \
+            ('http://sf.symcb.com/sf.crl0f', 'https://d.symcb.com/rpa0',
+             'http://sf.symcd.com0&', 'https://www.verisign.com/cps0*',
+             'https://www.verisign.com/rpa0', 'http://ocsp.verisign.com0')
+        sample_path = \
+            os.path.join(TESTS_BASEPATH, 'samples',
+                         '0a854e790ff63c0e56f08b5e65088b90.exe')
+        self.analyzer.file_path = sample_path
+        extracted_uris = self.analyzer.extract_uris(min_length=10)
+        self.assertItemsEqual(extracted_uris, expected_uris)
+        self.assertItemsEqual(self.analyzer.extracted_uris, expected_uris)
 
     def test_suspicious_sections_detection(self):
         """"""
@@ -229,3 +238,15 @@ class PEAnalyzerTestCase(unittest.TestCase):
         self.assertDictEqual(extracted_addresses, expected_addresses)
         self.assertDictEqual(self.analyzer.directories_addresses,
                              expected_addresses)
+
+    def test_strings_extraction(self):
+        """"""
+        expected_strings_length = 188
+        sample_path = \
+            os.path.join(TESTS_BASEPATH, 'samples',
+                         '0c95e89094915011a1e477c31341b771.exe')
+        self.analyzer.file_path = sample_path
+        extracted_strings = self.analyzer.extract_strings(min_length=6)
+        self.assertEqual(len(extracted_strings), expected_strings_length)
+        self.assertEqual(len(self.analyzer.extracted_strings),
+                         expected_strings_length)
